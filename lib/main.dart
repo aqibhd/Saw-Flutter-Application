@@ -13,6 +13,7 @@ class Saw extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Saw',
+      debugShowCheckedModeBanner: false,
       home: Splash(),
     );
   }
