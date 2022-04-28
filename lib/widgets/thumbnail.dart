@@ -4,7 +4,7 @@ import 'package:transparent_image/transparent_image.dart';
 class Thumbnail extends StatelessWidget {
   final String url;
   final String avgColor;
-  const Thumbnail({Key? key, required this.url, required this.avgColor})
+  const Thumbnail({Key? key, required this.avgColor, required this.url})
       : super(key: key);
 
   @override

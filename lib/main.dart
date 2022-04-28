@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:saw/view/splash.dart';
+import 'package:saw/view/home.dart';
 
 void main() {
   runApp(const Saw());
@@ -14,7 +14,7 @@ class Saw extends StatelessWidget {
     return const MaterialApp(
       title: 'Saw',
       debugShowCheckedModeBanner: false,
-      home: Splash(),
+      home: Home(),
     );
   }
 }
