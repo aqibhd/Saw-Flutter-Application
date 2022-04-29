@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:saw/controller/home_controller.dart';
 import 'package:saw/utils/colors.dart';
 import 'package:http/http.dart' as http;
+import 'package:saw/utils/functions.dart';
+import 'package:saw/view/photo.dart';
 import 'package:saw/widgets/thumbnail.dart';
 
 class Home extends StatefulWidget {
@@ -20,6 +25,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     getPhotos();
   }
 
@@ -33,6 +39,7 @@ class _HomeState extends State<Home> {
         }).then((value) {
       Map result = jsonDecode(value.body);
       homeController.updatePhotoList = result['photos'];
+
       homeController.updateInitLoading = false;
     });
   }
@@ -58,26 +65,147 @@ class _HomeState extends State<Home> {
         floatHeaderSlivers: true,
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) =>
             [
-          const SliverAppBar(
-            backgroundColor: background,
-            floating: true,
-            snap: true,
-            actions: [
-              Padding(
-                padding: EdgeInsets.only(right: 16),
-                child: Icon(
-                  Icons.search,
-                  color: white,
-                ),
+          Theme(
+            data: ThemeData(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent),
+            child: SliverAppBar(
+              backgroundColor: background,
+              floating: true,
+              snap: true,
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                statusBarIconBrightness: Brightness.light,
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 16),
-                child: Icon(
-                  Icons.more_horiz_rounded,
-                  color: white,
+              actions: [
+                const Padding(
+                  padding: EdgeInsets.only(right: 16),
+                  child: Icon(
+                    Icons.search,
+                    color: Color(0xffC6C6C6),
+                  ),
                 ),
-              ),
-            ],
+                InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, bottom: 15),
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                  color: white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15),
+                                        child: SizedBox(
+                                          height: 40,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                            child: Row(children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: SvgPicture.asset(
+                                                    'assets/icons/theme_icon.svg'),
+                                              ),
+                                              const Text(
+                                                "Dark Mode",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              )
+                                            ]),
+                                          ),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          reportBugs();
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15),
+                                          child: SizedBox(
+                                            height: 40,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16),
+                                              child: Row(children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 10),
+                                                  child: SvgPicture.asset(
+                                                      'assets/icons/bug_icon.svg'),
+                                                ),
+                                                const Text(
+                                                  "Report Bugs",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
+                                                )
+                                              ]),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 15),
+                                        child: SizedBox(
+                                          height: 40,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16),
+                                            child: Row(children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: SvgPicture.asset(
+                                                    'assets/icons/additional_icon.svg'),
+                                              ),
+                                              const Text(
+                                                "Additional Resource",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
+                                              )
+                                            ]),
+                                          ),
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          );
+                        });
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Icon(
+                      Icons.more_horiz_rounded,
+                      color: Color(0xffC6C6C6),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
         body: Container(
@@ -133,11 +261,38 @@ class _HomeState extends State<Home> {
                                         childAspectRatio: 2 / 3),
                                 delegate: SliverChildBuilderDelegate(
                                     (context, index) {
-                                  return Thumbnail(
-                                      url: homeController.photos[index]['src']
-                                          ['tiny'],
-                                      avgColor: homeController.photos[index]
-                                          ['avg_color']);
+                                  return OpenContainer(
+                                    openColor: Color(int.parse(code(
+                                        homeController.photos[index]
+                                            ['avg_color']))),
+                                    closedColor: Color(int.parse(code(
+                                        homeController.photos[index]
+                                            ['avg_color']))),
+                                    middleColor: Color(int.parse(code(
+                                        homeController.photos[index]
+                                            ['avg_color']))),
+                                    closedShape: const RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.all(Radius.zero)),
+                                    transitionType:
+                                        ContainerTransitionType.fadeThrough,
+                                    closedBuilder: (context, openContainer) {
+                                      return InkWell(
+                                        onTap: () {
+                                          openContainer();
+                                        },
+                                        child: Thumbnail(
+                                            url: homeController.photos[index]
+                                                ['src']['tiny'],
+                                            avgColor: homeController
+                                                .photos[index]['avg_color']),
+                                      );
+                                    },
+                                    openBuilder: (context, openContainer) {
+                                      return Photo(
+                                          source: homeController.photos[index]);
+                                    },
+                                  );
                                 }, childCount: homeController.photos.length),
                               ),
                         SliverList(
@@ -151,7 +306,7 @@ class _HomeState extends State<Home> {
                                           height: 16,
                                           width: 16,
                                           child: CircularProgressIndicator(
-                                            color: Color(0xff353535),
+                                            color: Color(0xffC6C6C6),
                                             strokeWidth: 1,
                                           )),
                                     )
