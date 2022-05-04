@@ -12,8 +12,6 @@ class PhotoController extends GetxController {
 
   set changeIsInPreviewMode(bool value) {
     isInPreviewMode = value;
-    print(isInPreviewMode);
-
     update();
   }
 }

@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fader/flutter_fader.dart';
 import 'package:get/get.dart';
+import 'package:glassmorphism/glassmorphism.dart';
 import 'package:saw/controller/photo_controller.dart';
-import 'package:saw/utils/colors.dart';
 import 'package:saw/utils/functions.dart';
+import 'package:saw/utils/simple_colors.dart';
 import 'package:screenshot/screenshot.dart';
 
 class Photo extends StatefulWidget {
@@ -40,21 +41,20 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
     super.dispose();
     photoController.isInPreviewMode = false;
     photoController.isSettingWallpaper = false;
-
     animationController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: Container(
-        color: background,
-        child: Stack(children: [
-          GetBuilder<PhotoController>(
-              init: PhotoController(),
-              builder: (value) {
-                return InkWell(
+    return GetBuilder<PhotoController>(
+        init: PhotoController(),
+        builder: (_) {
+          return Scaffold(
+            extendBody: true,
+            body: Container(
+              color: SimpleColors.background,
+              child: Stack(alignment: Alignment.center, children: [
+                InkWell(
                   onTap: () {
                     photoController.changeIsInPreviewMode =
                         !photoController.isInPreviewMode;
@@ -101,68 +101,106 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
                       ),
                     ),
                   ),
-                );
-              }),
-          SafeArea(
-            child: Fader(
-              controller: faderController,
-              duration: const Duration(milliseconds: 300),
-              child: SizedBox(
-                height: 50,
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    Opacity(
-                      opacity: .25,
-                      child: Container(
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: SafeArea(
+                    child: Fader(
+                      controller: faderController,
+                      duration: const Duration(milliseconds: 300),
+                      child: SizedBox(
                         height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        color: Colors.black,
+                        child: Stack(
+                          alignment: AlignmentDirectional.center,
+                          children: [
+                            Opacity(
+                              opacity: .25,
+                              child: Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Row(children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: InkWell(
+                                  onTap: () => Navigator.pop(context),
+                                  child: const SizedBox(
+                                    height: 36,
+                                    width: 36,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: Text(
+                                    widget.source['alt'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                  padding: EdgeInsets.only(right: 8),
+                                  child: SizedBox(
+                                    height: 36,
+                                    width: 36,
+                                  ))
+                            ]),
+                          ],
+                        ),
                       ),
                     ),
-                    Row(children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: const SizedBox(
-                            height: 36,
-                            width: 36,
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Text(
-                            widget.source['alt'],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                      const Padding(
-                          padding: EdgeInsets.only(right: 8),
-                          child: SizedBox(
-                            height: 36,
-                            width: 36,
-                          ))
-                    ]),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ),
-          GetBuilder<PhotoController>(
-              init: PhotoController(),
-              builder: (value) {
-                return Positioned(
+                Visibility(
+                  visible: photoController.isSettingWallpaper ? true : false,
+                  child: GlassmorphicContainer(
+                    width: 150,
+                    height: 50,
+                    borderRadius: 8,
+                    blur: 8,
+                    alignment: Alignment.center,
+                    border: 2,
+                    linearGradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.black.withOpacity(0.6),
+                          Colors.black.withOpacity(0.6),
+                        ],
+                        stops: const [
+                          0.1,
+                          1,
+                        ]),
+                    borderGradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Colors.black.withOpacity(0.0),
+                        Colors.black.withOpacity(0.0),
+                      ],
+                    ),
+                    child: Text(
+                      "Setting Wallpaper...",
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 221, 221, 221),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
@@ -176,46 +214,25 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
                             fileName: widget.source['alt'],
                             controller: screenshotController);
                         photoController.changeIsSettingWallpaper = false;
+                        Navigator.pop(context);
                       },
-                      child: Opacity(
-                        opacity: .93,
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 45,
-                          child: Stack(
-                            children: [
-                              Visibility(
-                                visible: photoController.isSettingWallpaper
-                                    ? true
-                                    : false,
-                                child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                              Visibility(
-                                visible: !photoController.isSettingWallpaper
-                                    ? true
-                                    : false,
-                                child: const Text("Set As Wallpaper",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 0.7,
-                                        color: white)),
-                              )
-                            ],
-                          ),
-                          color: black,
-                        ),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 45,
+                        child: const Text("Set As Wallpaper",
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.7,
+                                color: Colors.white)),
+                        color: Colors.black.withOpacity(0.96),
                       ),
                     ),
                   ),
-                );
-              })
-        ]),
-      ),
-    );
+                )
+              ]),
+            ),
+          );
+        });
   }
 }

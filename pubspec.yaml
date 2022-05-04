@@ -37,6 +37,7 @@ dependencies:
   flutter_svg: ^1.0.3
   flutter_wallpaper_manager: ^0.0.3
   get: ^4.6.1
+  glassmorphism: ^3.0.0
   http: ^0.13.4
   path_provider: ^2.0.9
   screenshot: ^1.2.3
@@ -56,6 +57,7 @@ flutter_icons:
   ios: true
   image_path: "assets/launch_icon/ic_launcher.png"
   adaptive_icon_foreground: "assets/launch_icon/ic_launcher.png"
+  adaptive_icon_background: "#040404"
 
 flutter_native_splash:
   color: "#040404"

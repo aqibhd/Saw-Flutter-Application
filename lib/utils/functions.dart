@@ -38,7 +38,7 @@ Future<void> setAsWallpaper(BuildContext context,
   } else {}
 }
 
-void reportBugs() async {
+Future<void> reportBugs() async {
   final Uri params = Uri(
     scheme: 'mailto',
     path: 'dev.aqibh@gmail.com',
@@ -46,4 +46,19 @@ void reportBugs() async {
   );
 
   if (!await launchUrl(params)) throw 'Could not launch $params';
+}
+
+Future<void> launchInstagram() async {
+  final Uri params =
+      Uri(scheme: 'https', host: 'www.instagram.com', path: 'dev.aqibh/');
+  final bool nativeAppLaunchSucceeded = await launchUrl(
+    params,
+    mode: LaunchMode.externalNonBrowserApplication,
+  );
+  if (!nativeAppLaunchSucceeded) {
+    await launchUrl(
+      params,
+      mode: LaunchMode.inAppWebView,
+    );
+  }
 }

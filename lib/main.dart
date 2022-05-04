@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:saw/controller/theme_controller.dart';
 import 'package:saw/view/home.dart';
 
 void main() {
-  runApp(const Saw());
+  runApp(Saw());
 }
 
 class Saw extends StatelessWidget {
-  const Saw({Key? key}) : super(key: key);
+  Saw({Key? key}) : super(key: key);
+  final ThemeController themeController = Get.put(ThemeController());
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
