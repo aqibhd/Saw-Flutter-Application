@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:saw/utils/functions.dart';
 import 'package:saw/utils/simple_colors.dart';
 import 'package:saw/view/photo.dart';
+import 'package:saw/view/search.dart';
 import 'package:saw/widgets/thumbnail.dart';
 
 class Home extends StatefulWidget {
@@ -82,11 +83,17 @@ class _HomeState extends State<Home> {
                       statusBarIconBrightness: Brightness.light,
                     ),
                     actions: [
-                      const Padding(
-                        padding: EdgeInsets.only(right: 16),
-                        child: Icon(
-                          Icons.search,
-                          color: Color(0xffC6C6C6),
+                      InkWell(
+                        onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Search())),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: Icon(
+                            Icons.search,
+                            color: SimpleColors.icon,
+                          ),
                         ),
                       ),
                       InkWell(
@@ -312,11 +319,11 @@ class _HomeState extends State<Home> {
                                 );
                               });
                         },
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 16),
-                          child: Icon(
-                            Icons.more_horiz_rounded,
-                            color: Color(0xffC6C6C6),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16),
+                          child: SvgPicture.asset(
+                            'assets/icons/more_icon.svg',
+                            color: SimpleColors.icon,
                           ),
                         ),
                       ),
@@ -345,6 +352,7 @@ class _HomeState extends State<Home> {
                       init: HomeController(),
                       builder: (value) {
                         return RefreshIndicator(
+                          color: Colors.black,
                           displacement: 10,
                           onRefresh: () async {
                             _pageNo = 1;
@@ -429,13 +437,13 @@ class _HomeState extends State<Home> {
                                         ? Container(
                                             height: 60,
                                             alignment: Alignment.center,
-                                            child: const SizedBox(
+                                            child: SizedBox(
                                                 height: 16,
                                                 width: 16,
                                                 child:
                                                     CircularProgressIndicator(
-                                                  color: Color(0xffC6C6C6),
-                                                  strokeWidth: 1,
+                                                  color: SimpleColors.icon,
+                                                  strokeWidth: 1.5,
                                                 )),
                                           )
                                         : const SizedBox();

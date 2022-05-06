@@ -9,6 +9,7 @@ class SimpleColors {
   static Color? _background;
   static Color? _modalBackground;
   static Color? _text;
+  static Color? _icon;
 
   static Color get background {
     return _background = _themeController.isDarkMode
@@ -26,5 +27,9 @@ class SimpleColors {
     return _modalBackground = _themeController.isDarkMode
         ? const Color(0xff0F0F0F)
         : const Color(0xffFFFFFF);
+  }
+
+  static Color get icon {
+    return _icon = const Color(0xff7C7C7C);
   }
 }

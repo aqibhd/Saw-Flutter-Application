@@ -92,7 +92,7 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
                                 photoController.changeIsInPreviewMode = false;
                               }
                             : null,
-                        minScale: 1,
+                        minScale: 0.5,
                         maxScale: 1.5,
                         child: CachedNetworkImage(
                             fit: BoxFit.cover,

@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.1
   glassmorphism: ^3.0.0
   http: ^0.13.4
+  measured_size: ^1.0.0
   path_provider: ^2.0.9
   screenshot: ^1.2.3
   show_up_animation: ^2.0.0
