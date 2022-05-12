@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saw/utils/functions.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class Thumbnail extends StatelessWidget {
@@ -16,10 +17,6 @@ class Thumbnail extends StatelessWidget {
           fit: BoxFit.cover,
           fadeInDuration: const Duration(milliseconds: 350),
         ),
-        color: Color(int.parse(code(avgColor))));
-  }
-
-  String code(String code) {
-    return '0xff' + code.substring(1);
+        color: Color(int.parse(convertHexToInt(avgColor))));
   }
 }

@@ -6,12 +6,17 @@ class PhotoController extends GetxController {
 
   set changeIsSettingWallpaper(bool value) {
     isSettingWallpaper = value;
-
     update();
   }
 
   set changeIsInPreviewMode(bool value) {
     isInPreviewMode = value;
+
     update();
+  }
+
+  void reset() {
+    isSettingWallpaper = false;
+    isInPreviewMode = false;
   }
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_wallpaper_manager/flutter_wallpaper_manager.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:saw/controller/photo_controller.dart';
+import 'package:saw/controller/theme_controller.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-String code(String code) {
-  //function to convert to hex-code to int
-  return '0xff' + code.substring(1);
+String convertHexToInt(String color) {
+  return '0xff' + color.substring(1);
 }
 
 Future<void> setAsWallpaper(BuildContext context,
@@ -41,16 +42,16 @@ Future<void> setAsWallpaper(BuildContext context,
 Future<void> reportBugs() async {
   final Uri params = Uri(
     scheme: 'mailto',
-    path: 'dev.aqibh@gmail.com',
+    path: 'dv.aqibh@gmail.com',
     query: 'subject=SAW Bug Report&body=Describe the bug here...',
   );
 
   if (!await launchUrl(params)) throw 'Could not launch $params';
 }
 
-Future<void> launchInstagram() async {
-  final Uri params =
-      Uri(scheme: 'https', host: 'www.instagram.com', path: 'dev.aqibh/');
+Future<void> launchGivenUrl(
+    {required String host, required String path}) async {
+  final Uri params = Uri(scheme: 'https', host: host, path: path);
   final bool nativeAppLaunchSucceeded = await launchUrl(
     params,
     mode: LaunchMode.externalNonBrowserApplication,
@@ -61,4 +62,17 @@ Future<void> launchInstagram() async {
       mode: LaunchMode.inAppWebView,
     );
   }
+}
+
+void setSystemUIOverlayStyle() {
+  final ThemeController themeController = Get.find<ThemeController>();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    systemStatusBarContrastEnforced: false,
+    statusBarIconBrightness: themeController.isDarkMode
+        ? Brightness.light
+        : themeController.isPhotoOpened
+            ? Brightness.light
+            : Brightness.dark,
+  ));
 }

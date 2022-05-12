@@ -21,14 +21,11 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
   final PhotoController photoController = Get.put(PhotoController());
   final ScreenshotController screenshotController = ScreenshotController();
   final FaderController faderController = FaderController();
-  String code(String code) {
-    //function to convert to hex-code to int
-    return '0xff' + code.substring(1);
-  }
 
   @override
   void initState() {
     super.initState();
+
     animationController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 100));
     Future.delayed(const Duration(milliseconds: 400), () {
@@ -39,8 +36,8 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    photoController.isInPreviewMode = false;
-    photoController.isSettingWallpaper = false;
+    photoController.reset();
+
     animationController.dispose();
   }
 
@@ -50,7 +47,7 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
         init: PhotoController(),
         builder: (_) {
           return Scaffold(
-            extendBody: true,
+            extendBodyBehindAppBar: true,
             body: Container(
               color: SimpleColors.background,
               child: Stack(alignment: Alignment.center, children: [
@@ -67,7 +64,8 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
                     }
                   },
                   child: Container(
-                    color: Color(int.parse(code(widget.source['avg_color']))),
+                    color: Color(
+                        int.parse(convertHexToInt(widget.source['avg_color']))),
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child: Screenshot(
@@ -106,24 +104,34 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
                   top: 0,
                   left: 0,
                   right: 0,
-                  child: SafeArea(
-                    child: Fader(
-                      controller: faderController,
-                      duration: const Duration(milliseconds: 300),
-                      child: SizedBox(
-                        height: 50,
-                        child: Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            Opacity(
-                              opacity: .25,
-                              child: Container(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width,
-                                color: Colors.black,
-                              ),
-                            ),
-                            Row(children: [
+                  child: SizedBox(
+                    height: 50 + MediaQuery.of(context).padding.top,
+                    child: Stack(
+                      alignment: AlignmentDirectional.center,
+                      children: [
+                        Opacity(
+                          opacity: .25,
+                          child: Container(
+                            height: 50 + MediaQuery.of(context).padding.top,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                    colors: [
+                                  Colors.black.withOpacity(1),
+                                  Colors.black.withOpacity(0.005)
+                                ])),
+                            // color: Colors.black,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).padding.top),
+                          child: Fader(
+                            controller: faderController,
+                            duration: const Duration(milliseconds: 300),
+                            child: Row(children: [
                               Padding(
                                 padding: const EdgeInsets.only(left: 8),
                                 child: InkWell(
@@ -158,9 +166,9 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
                                     width: 36,
                                   ))
                             ]),
-                          ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ),
@@ -192,10 +200,11 @@ class _PhotoState extends State<Photo> with SingleTickerProviderStateMixin {
                         Colors.black.withOpacity(0.0),
                       ],
                     ),
-                    child: Text(
+                    child: const Text(
                       "Setting Wallpaper...",
                       style: TextStyle(
-                        color: Color.fromARGB(255, 221, 221, 221),
+                        fontWeight: FontWeight.w600,
+                        color: Color.fromARGB(255, 206, 206, 206),
                       ),
                     ),
                   ),

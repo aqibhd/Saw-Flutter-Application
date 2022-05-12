@@ -1,5 +1,5 @@
 name: saw
-description: A new Flutter project.
+description: A simple application to find and set wallpaper.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -37,9 +37,10 @@ dependencies:
   flutter_svg: ^1.0.3
   flutter_wallpaper_manager: ^0.0.3
   get: ^4.6.1
+  get_storage: ^2.0.3
   glassmorphism: ^3.0.0
   http: ^0.13.4
-  measured_size: ^1.0.0
+
   path_provider: ^2.0.9
   screenshot: ^1.2.3
   show_up_animation: ^2.0.0

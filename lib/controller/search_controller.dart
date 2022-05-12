@@ -6,9 +6,15 @@ class SearchController extends GetxController {
   bool isEmptyList = false;
   bool isGettingPhotos = false;
   bool isLoading = false;
+  bool noResultFound = false;
 
   set updatePhotoList(List value) {
     photos = value;
+    update();
+  }
+
+  set updateNoResultFoundValue(bool value) {
+    noResultFound = value;
     update();
   }
 
@@ -47,5 +53,6 @@ class SearchController extends GetxController {
     isEmptyList = false;
     isGettingPhotos = false;
     isLoading = false;
+    noResultFound = false;
   }
 }
