@@ -44,7 +44,7 @@ class AdditionalResource extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 18),
                     child: Text(
-                      "Version 1.0.2",
+                      "Version 1.0.4",
                       style: TextStyle(color: SimpleColors.text, fontSize: 13),
                     ),
                   ),

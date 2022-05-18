@@ -405,17 +405,11 @@ class _HomeState extends State<Home> {
                                 : null,
                             slivers: [
                               homeController.initLoading
-                                  ? SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                        (BuildContext context, int index) {
-                                          return Container(
-                                            color: SimpleColors.background,
-                                            height: MediaQuery.of(context)
-                                                .size
-                                                .height,
-                                          );
-                                        },
-                                        childCount: 1,
+                                  ? SliverToBoxAdapter(
+                                      child: Container(
+                                        color: SimpleColors.background,
+                                        height:
+                                            MediaQuery.of(context).size.height,
                                       ),
                                     )
                                   : SliverGrid(
@@ -484,26 +478,20 @@ class _HomeState extends State<Home> {
                                           childCount:
                                               homeController.photos.length),
                                     ),
-                              SliverList(
-                                delegate: SliverChildBuilderDelegate(
-                                  (BuildContext context, int index) {
-                                    return !homeController.initLoading
-                                        ? Container(
-                                            height: 60,
-                                            alignment: Alignment.center,
-                                            child: SizedBox(
-                                                height: 16,
-                                                width: 16,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: SimpleColors.icon,
-                                                  strokeWidth: 1.5,
-                                                )),
-                                          )
-                                        : const SizedBox();
-                                  },
-                                  childCount: 1,
-                                ),
+                              SliverToBoxAdapter(
+                                child: !homeController.initLoading
+                                    ? Container(
+                                        height: 60,
+                                        alignment: Alignment.center,
+                                        child: SizedBox(
+                                            height: 16,
+                                            width: 16,
+                                            child: CircularProgressIndicator(
+                                              color: SimpleColors.icon,
+                                              strokeWidth: 1.5,
+                                            )),
+                                      )
+                                    : const SizedBox(),
                               )
                             ],
                           ),

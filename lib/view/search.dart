@@ -115,32 +115,26 @@ class _SearchState extends State<Search> {
                               slivers: [
                                 (searchController.isGettingPhotos ||
                                         searchController.photos.isEmpty)
-                                    ? SliverList(
-                                        delegate: SliverChildBuilderDelegate(
-                                          (BuildContext context, int index) {
-                                            return Container(
-                                              alignment: Alignment.center,
-                                              color: SimpleColors.background,
-                                              height: MediaQuery.of(context)
-                                                  .size
-                                                  .height,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 60),
-                                                child: Text(
-                                                  searchController.noResultFound
-                                                      ? "No result found for '$_query'"
-                                                      : "",
-                                                  style: TextStyle(
-                                                      color: SimpleColors.text,
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          childCount: 1,
+                                    ? SliverToBoxAdapter(
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          color: SimpleColors.background,
+                                          height: MediaQuery.of(context)
+                                              .size
+                                              .height,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 60),
+                                            child: Text(
+                                              searchController.noResultFound
+                                                  ? "No result found for '$_query'"
+                                                  : "",
+                                              style: TextStyle(
+                                                  color: SimpleColors.text,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600),
+                                            ),
+                                          ),
                                         ),
                                       )
                                     : SliverGrid(
@@ -209,38 +203,32 @@ class _SearchState extends State<Search> {
                                             childCount:
                                                 searchController.photos.length),
                                       ),
-                                SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                    (BuildContext context, int index) {
-                                      return searchController.isEmptyList
+                                SliverToBoxAdapter(
+                                  child: searchController.isEmptyList
+                                      ? Container(
+                                          height: 60,
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "You’ve reached the end of the list 😦",
+                                            style: TextStyle(
+                                                color: SimpleColors.icon,
+                                                fontSize: 14),
+                                          ),
+                                        )
+                                      : searchController.isLoading
                                           ? Container(
                                               height: 60,
                                               alignment: Alignment.center,
-                                              child: Text(
-                                                "You’ve reached the end of the list 😦",
-                                                style: TextStyle(
+                                              child: SizedBox(
+                                                  height: 16,
+                                                  width: 16,
+                                                  child:
+                                                      CircularProgressIndicator(
                                                     color: SimpleColors.icon,
-                                                    fontSize: 14),
-                                              ),
+                                                    strokeWidth: 1.5,
+                                                  )),
                                             )
-                                          : searchController.isLoading
-                                              ? Container(
-                                                  height: 60,
-                                                  alignment: Alignment.center,
-                                                  child: SizedBox(
-                                                      height: 16,
-                                                      width: 16,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        color:
-                                                            SimpleColors.icon,
-                                                        strokeWidth: 1.5,
-                                                      )),
-                                                )
-                                              : const SizedBox();
-                                    },
-                                    childCount: 1,
-                                  ),
+                                          : const SizedBox(),
                                 )
                               ],
                             ),
